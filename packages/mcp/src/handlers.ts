@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as crypto from "crypto";
-import { Context, COLLECTION_LIMIT_MESSAGE } from "@zilliz/claude-context-core";
+import { Context, COLLECTION_LIMIT_MESSAGE } from "@fkberthold/claude-context-core";
 import { SnapshotManager } from "./snapshot.js";
 import { ensureAbsolutePath, truncateContent, trackCodebasePath } from "./utils.js";
 
@@ -79,11 +79,12 @@ export class ToolHandlers {
 
                     if (results && results.length > 0) {
                         const firstResult = results[0];
-                        const metadataStr = firstResult.metadata;
+                        const metadataRaw = firstResult.metadata;
 
-                        if (metadataStr) {
+                        if (metadataRaw) {
                             try {
-                                const metadata = JSON.parse(metadataStr);
+                                // Handle both string (Zilliz/Milvus) and object (LanceDB) metadata formats
+                                const metadata = typeof metadataRaw === 'string' ? JSON.parse(metadataRaw) : metadataRaw;
                                 const codebasePath = metadata.codebasePath;
 
                                 if (codebasePath && typeof codebasePath === 'string') {
@@ -343,7 +344,7 @@ export class ToolHandlers {
             await this.context.getLoadedIgnorePatterns(absolutePath);
 
             // Initialize file synchronizer with proper ignore patterns (including project-specific patterns)
-            const { FileSynchronizer } = await import("@zilliz/claude-context-core");
+            const { FileSynchronizer } = await import("@fkberthold/claude-context-core");
             const ignorePatterns = this.context.getIgnorePatterns() || [];
             console.log(`[BACKGROUND-INDEX] Using ignore patterns: ${ignorePatterns.join(', ')}`);
             const synchronizer = new FileSynchronizer(absolutePath, ignorePatterns);

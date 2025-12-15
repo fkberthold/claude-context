@@ -1,5 +1,5 @@
 {
-    "name": "@zilliz/claude-context-mcp",
+    "name": "@fkberthold/claude-context-mcp",
     "version": "0.1.3",
     "description": "Model Context Protocol integration for Claude Context",
     "type": "module",
@@ -7,7 +7,7 @@
     "types": "dist/index.d.ts",
     "bin": "dist/index.js",
     "scripts": {
-        "build": "pnpm clean && tsc --build --force",
+        "build": "npm run clean && tsc --build --force",
         "dev": "tsx --watch src/index.ts",
         "clean": "rimraf dist",
         "lint": "eslint src --ext .ts",
@@ -18,7 +18,7 @@
         "prepublishOnly": "pnpm build"
     },
     "dependencies": {
-        "@zilliz/claude-context-core": "workspace:*",
+        "@fkberthold/claude-context-core": "file:../core",
         "@modelcontextprotocol/sdk": "^1.12.1",
         "zod": "^3.25.55"
     },
